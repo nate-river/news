@@ -10,19 +10,28 @@ import Tabbar from './Tabbar';
 
 class Header extends Component {
   state = {
-    data: []
+    data: [
+      {id: 1, name: '要闻'},
+      {id: 2, name: '财经'},
+      {id: 3, name: '娱乐'},
+      {id: 4, name: '体育'},
+      {id: 5, name: '军事'},
+      {id: 6, name: '科技'},
+      {id: 7, name: '历史'},
+      {id: 8, name: '精选'}
+    ]
   };
 
-  componentDidMount() {
-    //noinspection JSUnresolvedFunction
-    fetch('/cate')
-      .then(res=>res.json())
-      .then(data=> {
-        this.setState({
-          data: data.reverse()
-        })
-      })
-  }
+  // componentDidMount() {
+  //   //noinspection JSUnresolvedFunction
+  //   fetch('/cate')
+  //     .then(res=>res.json())
+  //     .then(data=> {
+  //       this.setState({
+  //         data: data.reverse()
+  //       })
+  //     })
+  // }
 
   render() {
     var els = this.state.data.map(v=>
