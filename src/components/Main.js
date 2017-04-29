@@ -1,60 +1,117 @@
 import React, {Component} from 'react';
 import './Main.css';
-
 import {
-  BrowserRouter as Router,
   Route,
   Link
 } from 'react-router-dom';
+//noinspection JSUnresolvedVariable
 import logo from '../logo.svg';
 import Tabbar from './Tabbar';
 
 class Header extends Component {
   state = {
-    show: false
+    data: []
   };
 
+  componentDidMount() {
+    //noinspection JSUnresolvedFunction
+    fetch('/cate')
+      .then(res=>res.json())
+      .then(data=> {
+        this.setState({
+          data: data.reverse()
+        })
+      })
+  }
+
   render() {
-    const cate = ['财经', '要闻', '军事', '娱乐', '体育'];
-    var els = cate.map((v, i)=>
-      <Link key={i} to={`/main/${i+1}`}
-            onClick={()=>this.setState({show:false})}>
-        {v}
+    var els = this.state.data.map(v=>
+      <Link key={v.id} to={`/main/${v.id}`}
+            className={this.props.cate==v.id?'active':''}
+            onClick={()=>this.setState({cate:v.id})}>
+        {v.name}
       </Link>
     );
     return (
       <div className="header">
-        <div className="menu"
-             onClick={()=>this.setState({show:!this.state.show})}></div>
-        <div className="logo">
-          <img src={logo} height={30} alt=""/>
-        </div>
-        <div className={`menu-content ${this.state.show?'active':''}`}>
+        <div className={`menu-content`}>
           {els}
+        </div>
+        <div className="logo">
+          <img className={this.props.l?'rotate':''} src={logo} height={25} alt=""/>
         </div>
       </div>
 
     )
   }
 }
-class Content extends Component {
+
+class List extends Component {
+  state = {
+    loading: true,
+    data: []
+  };
+
+  componentDidMount() {
+    this.fetchData(this.props.match.params.cate || 1);
+  }
+
+  componentWillReceiveProps(nextProps) {
+    this.fetchData(nextProps.match.params.cate || 1);
+  }
+
+  fetchData = (id)=> {
+    this.setState({loading: true});
+    fetch(`/news/${id}`)
+      .then(res=>res.json())
+      .then(res=> {
+        this.setState({
+          loading: false,
+          data: res
+        });
+      });
+  };
+
   render() {
-    var id = Number(this.props.match.params.cate || 10);
-    var els = [];
-    for (let i = 0; i < id; i++) {
-      els.push(<div className="card" key={i}></div>)
-    }
+    //noinspection JSUnresolvedVariable
+    var els = this.state.data.map(v=>
+      <Link key={v.id} to={
+        {
+        pathname:`/main/${this.props.match.params.cate||1}/${v.id}`,
+        state:{url:v.url}
+        }
+      }>
+        <div className="card">
+          <div className="left" style={{background:`url(${v.thumbnail}) no-repeat center/cover`}}></div>
+          <div className="right">
+            {v.title}
+          </div>
+        </div>
+      </Link>
+    );
     return (
-      <div className="content">
-        {els}
+      <div>
+        <Header l={this.state.loading} cate={this.props.match.params.cate||1}/>
+        <div className="content">
+          {els}
+        </div>
+        <Tabbar/>
       </div>
     )
   }
 }
-class B extends Component {
+
+import Back from './Back';
+
+class Show extends Component {
   render() {
+    // this.props.location
     return (
-      <div> this is B</div>
+      <div>
+        <Back url={`/main/${this.props.match.params.cate}`}/>
+        <iframe src={this.props.location.state.url}
+                style={{border:'none',width:'100%',height:'100vh'}}></iframe>
+      </div>
     )
   }
 }
@@ -63,13 +120,13 @@ class Main extends Component {
   render() {
     return (
       <div>
-        <Header/>
-        <Route exact path="/" component={Content}/>
-        <Route exact path="/main" component={Content}/>
-        <Route path="/main/:cate" component={Content}/>
-        <Tabbar/>
+        <Route exact path="/" component={List}/>
+        <Route exact path="/main" component={List}/>
+        <Route exact path="/main/:cate" component={List}/>
+        <Route path="/main/:cate/:id" component={Show}/>
       </div>
     )
   }
 }
+
 export default Main;

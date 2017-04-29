@@ -5,24 +5,16 @@ class Tabbar extends Component {
     return (
       <div className="tab-bar">
         <div className="item">
-          <Link to="/">
-            首页
-          </Link>
+          <Link to="/"/>
         </div>
         <div className="item">
-          <Link to="/hot">
-            热门
-          </Link>
+          <Link to="/hot"/>
         </div>
         <div className="item">
-          <Link to="/discover">
-            发现
-          </Link>
+          <Link to="/discover"/>
         </div>
         <div className="item">
-          <Link to="/me">
-            我的
-          </Link>
+          <Link to="/me"/>
         </div>
       </div>
     )

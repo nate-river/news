@@ -7,6 +7,20 @@
   -webkit-tap-highlight-color: transparent;
 }
 
+.back-header {
+  height: 48px;
+  background: #fff;
+  position: relative;
+}
+
+.back-header .back {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 48px;
+  height: 100%;
+}
+
 .App {
   text-align: center;
 }

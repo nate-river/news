@@ -1,3 +1,4 @@
+//noinspection JSUnresolvedVariable
 import React, {Component} from 'react';
 import './App.css';
 import {
@@ -5,7 +6,6 @@ import {
   Route
 } from 'react-router-dom';
 
-// import Splash from './components/Spalash'
 import Login from './components/Login';
 import Main from './components/Main';
 import Hot from './components/Hot';
@@ -18,7 +18,6 @@ class App extends Component {
       <Router>
         <div>
           <Route exact path="/" component={Main}/>
-
           <Route path="/login" component={Login}/>
           <Route path="/main" component={Main}/>
           <Route path="/hot" component={Hot}/>
@@ -29,15 +28,5 @@ class App extends Component {
     );
   }
 }
-
 export default App;
 
-// 1.启动了一个web服务器(=apache) webpack-dev-server
-// 2.自动打开浏览器 localhost:3000
-// 3.服务器给我们回应页面  回应编译合并后的js  bundle.js
-// 4.同时回应一个socket.js
-//
-//
-// 5.服务器监听文件变化 src下如果发生变化
-//   就向浏览器发送一个信号
-//   浏览器收到信号调用location.reload()刷新页面;
